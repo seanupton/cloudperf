@@ -1,0 +1,24 @@
+---
+- hosts: all
+  remote_user: ubuntu
+  become: yes
+  gather_facts: yes
+  become_method: sudo
+  pre_tasks:
+    - name: Fail if Ansible is old
+      fail: msg="Ansible > 2.7.0 required"
+      when: ansible_version.full is version('2.7.0', '<')
+      tags:
+        - always
+    - name: Update packages via apt
+      when: ansible_os_family == 'Debian'
+      apt: upgrade=dist update_cache=yes
+      tags:
+        - update_packagesa
+  tasks:
+    - include_tasks: "{{taskname}}.yml"
+      loop_control:
+        loop_var: taskname
+      with_items:
+        - apt
+        - pyenv

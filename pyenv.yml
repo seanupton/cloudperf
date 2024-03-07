@@ -1,0 +1,36 @@
+- name: copy pyenv-installer script
+  copy:
+    src: pyenv-installer
+    dest: /home/ubuntu/pyenv-installer
+    mode: 0744
+    owner: ubuntu
+    group: ubnutu
+
+- name: add pyenv to path
+  ansible.builtin.blockinfile:
+    path: /home/ubuntu/.bash_profile
+    create: true
+    mode: 0644
+    owner: ubuntu
+    group: ubuntu
+    block: |
+      export PYENV_ROOT="$HOME/.pyenv"
+      export PATH="$PYENV_ROOT/bin:$PATH"
+
+- name: run pyenv-installer if no pyenv
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: if [ -d /home/ubuntu/.pyenv ]; then /home/ubuntu/pyenv-installer; fi
+  creates: /home/app/.pyenv
+
+- name: install Python 3.8.18
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: . /home/app/bash_profile && pyenv install 3.8.18
+    creates: /home/app/.pyenv/versions/3.8.18
+
+- name: install Python 3.12.2
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: . /home/app/bash_profile && pyenv install 3.12.2
+    creates: /home/app/.pyenv/versions/3.12.2

@@ -1,0 +1,29 @@
+---
+- name: Upgrade and update all packages to latest version
+  apt:
+    upgrade: true
+    update_cache: true
+    force_apt_get: true
+- name: pyenv build prerequisites
+  apt: name={{item}} state=present
+  with_items:
+    - build-essential
+    - libssl-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - curl
+    - libncursesw5-dev
+    - xz-utils
+    - tk-dev
+    - libxml2-dev
+    - libxmlsec1-dev
+    - libffi-dev
+    - liblzma-dev
+- name: Addtional library includes for linking when building
+  apt: name={{item}} state=present
+  with_items:
+    - libjpeg-dev
+    - libyaml-dev
+    - zlib1g-dev
