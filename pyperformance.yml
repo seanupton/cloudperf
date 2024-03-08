@@ -1,0 +1,62 @@
+- name: install python 3.8.18 venv for benchmarking
+  become: no
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: if [ ! -d /home/ubuntu/perf38 ]; then /home/ubuntu/.pyenv/versions/3.8.18/bin/python -m venv perf38; fi
+    creates: /home/ubuntu/perf38
+
+- name: install python 3.12.2 venv for benchmarking
+  become: no
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: if [ ! -d /home/ubuntu/perf312 ]; then /home/ubuntu/.pyenv/versions/3.12.2/bin/python -m venv perf312; fi
+    creates: /home/ubuntu/perf312
+
+- name: make python 3.10.12 (Ubuntu system) python venv for benchmarking
+  become: no
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: if [ ! -d /home/ubuntu/perf310 ]; then /usr/bin/python3 -m venv perf310; fi
+    creates: /home/ubuntu/perf310
+
+- name: pip install pyperformance (for 3.8.18)
+  become: no
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: /home/ubuntu/perf38/bin/python -m pip install pyperformance
+    creates: /home/ubuntu/perf38/lib/python3.8/site-packages/pyperformance 
+
+- name: pip install pyperformance (for 3.12.2)
+  become: no
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: /home/ubuntu/perf312/bin/python -m pip install pyperformance
+    creates: /home/ubuntu/perf312/lib/python3.12/site-packages/pyperformance 
+
+- name: pip install pyperformance (for system 3.10)
+  become: no
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: /home/ubuntu/perf310/bin/python -m pip install pyperformance
+    creates: /home/ubuntu/perf310/lib/python3.10/site-packages/pyperformance 
+
+- name: run pyperformance limited benchmarks (for 3.8.18)
+  become: no
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: /home/ubuntu/perf38/bin/pyperformance run -b {{ py_benchmarks }} -o /home/ubuntu/results38.json
+    creates: /home/ubuntu/results38.json
+
+- name: run pyperformance limited benchmarks (for 3.12.2)
+  become: no
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: /home/ubuntu/perf312/bin/pyperformance run -b {{ py_benchmarks }} -o /home/ubuntu/results312.json
+    creates: /home/ubuntu/results312.json
+
+- name: run pyperformance limited benchmarks (for 3.10 system)
+  become: no
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: /home/ubuntu/perf310/bin/pyperformance run -b {{ py_benchmarks }} -o /home/ubuntu/results310.json
+    creates: /home/ubuntu/results310.json
