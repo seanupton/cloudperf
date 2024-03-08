@@ -3,3 +3,4 @@ micro ansible_host=foo.example.com ansible_port=22 ansible_user='ubuntu' ansible
 
 [servers:vars]
 py_benchmarks=chameleon,deepcopy,json_dumps,logging_simple,unpickle,regex_compile,xml_etree,html5lib,sqlalchemy_declarative
+download_to=/Users/me/Downloads/benchmarks

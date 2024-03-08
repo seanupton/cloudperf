@@ -60,3 +60,19 @@
     executable: /bin/bash
     cmd: /home/ubuntu/perf310/bin/pyperformance run -b {{ py_benchmarks }} -o /home/ubuntu/results310.json
     creates: /home/ubuntu/results310.json
+
+- name: download benchmark results (python 3.8)
+  ansible.builtin.fetch:
+    src: /home/ubuntu/results38.json
+    dest: "{{ download_to }}/python"
+
+- name: download benchmark results (python 3.12)
+  ansible.builtin.fetch:
+    src: /home/ubuntu/results312.json
+    dest: "{{ download_to }}/python"
+
+- name: download benchmark results (python 3.10)
+  ansible.builtin.fetch:
+    src: /home/ubuntu/results310.json
+    dest: "{{ download_to }}/python"
+
