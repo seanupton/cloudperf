@@ -27,3 +27,8 @@
     - libjpeg-dev
     - libyaml-dev
     - zlib1g-dev
+- name: pip, venv for system Python 3.10
+  apt: name={{item}} state=present
+  with_items:
+    - python3-venv
+    - python3-pip
